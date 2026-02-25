@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: portfolio
-          image: ghcr.io/gael-rozario/portfolio:latest  # update to your registry
+          image: ghcr.io/gael-rozario/portfolio:0.0.1
           imagePullPolicy: Always
           ports:
             - containerPort: 80

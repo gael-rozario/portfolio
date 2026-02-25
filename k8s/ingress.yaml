@@ -5,12 +5,10 @@ metadata:
   namespace: portfolio
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
-    - match: Host(`www.gaelrozario.com`) || Host(`gaelrozario.com`)
+    - match: Host(`gaelrozario.com`) || Host(`www.gaelrozario.com`)
       kind: Rule
       services:
         - name: portfolio
           port: 80
-  tls:
-    certResolver: letsencrypt   # adjust to your Traefik certResolver name

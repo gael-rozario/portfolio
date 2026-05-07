@@ -4,7 +4,7 @@ on:
 
 jobs:
   test:
-    runs-on: arc-runner-lab-v2
+    runs-on: arc-runner-portfolio
     steps:
       - name: Print hostname
         run: hostname

@@ -14,6 +14,12 @@
       icon:  '✉',
     },
     {
+      label: 'Alt Email',
+      value: 'gaelrozario@gmail.com',
+      href:  'mailto:gaelrozario@gmail.com',
+      icon:  '✉',
+    },
+    {
       label: 'Phone',
       value: '+91 98955 81044',
       href:  'tel:+919895581044',
@@ -77,9 +83,6 @@
     </div>
   </section>
 
-  <footer>
-    <p>© {new Date().getFullYear()} {name} · Built with Svelte</p>
-  </footer>
 </main>
 
 <style>
@@ -101,19 +104,19 @@
     position: fixed;
     border-radius: 50%;
     filter: blur(120px);
-    opacity: 0.18;
+    opacity: 0.12;
     pointer-events: none;
     animation: drift 14s ease-in-out infinite alternate;
   }
   .orb1 {
     width: 500px; height: 500px;
-    background: #7b2ff7;
+    background: #6320cc;
     top: -120px; left: -100px;
     animation-duration: 16s;
   }
   .orb2 {
     width: 420px; height: 420px;
-    background: #00d4ff;
+    background: #0098c7;
     bottom: -100px; right: -80px;
     animation-duration: 20s;
     animation-direction: alternate-reverse;
@@ -139,7 +142,7 @@ h1 {
     font-weight: 800;
     line-height: 1.05;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, #e8eaf6 30%, #00d4ff 70%, #7b2ff7 100%);
+    background: linear-gradient(135deg, #1a1a2e 30%, #0098c7 70%, #6320cc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -157,7 +160,7 @@ h1 {
   .role {
     font-size: clamp(1rem, 3vw, 1.35rem);
     font-weight: 500;
-    color: #00d4ff;
+    color: #0098c7;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     animation: fadeUp 0.7s 0.3s ease both;
@@ -165,7 +168,7 @@ h1 {
 
   .tagline {
     font-size: clamp(0.9rem, 2vw, 1.05rem);
-    color: #9e9e9e;
+    color: #555;
     max-width: 460px;
     line-height: 1.6;
     animation: fadeUp 0.7s 0.45s ease both;
@@ -193,8 +196,8 @@ h1 {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.25rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 14px;
     padding: 1.1rem 1.2rem;
     text-decoration: none;
@@ -215,8 +218,8 @@ h1 {
   }
   .card:hover {
     transform: translateY(-4px);
-    border-color: rgba(0, 212, 255, 0.4);
-    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(0, 152, 199, 0.5);
+    background: rgba(255, 255, 255, 0.9);
   }
   .card:hover::before { opacity: 1; }
 
@@ -230,11 +233,11 @@ h1 {
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #00d4ff;
+    color: #0098c7;
   }
   .card-value {
     font-size: 0.85rem;
-    color: #c9cfe8;
+    color: #333;
     word-break: break-all;
   }
   .card-arrow {
@@ -242,22 +245,14 @@ h1 {
     top: 0.9rem;
     right: 1rem;
     font-size: 0.9rem;
-    color: rgba(255,255,255,0.2);
+    color: rgba(0,0,0,0.2);
     transition: color 0.2s ease, transform 0.2s ease;
   }
   .card:hover .card-arrow {
-    color: #00d4ff;
+    color: #0098c7;
     transform: translate(2px, -2px);
   }
 
-  /* ── Footer ────────────────────────────────────────────────────── */
-  footer {
-    position: absolute;
-    bottom: 1.5rem;
-    font-size: 0.75rem;
-    color: #555;
-    letter-spacing: 0.05em;
-  }
 
   /* ── Shared animations ─────────────────────────────────────────── */
   @keyframes fadeDown {

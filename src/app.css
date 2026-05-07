@@ -5,16 +5,16 @@
 }
 
 :root {
-  --accent:  #00d4ff;
-  --accent2: #7b2ff7;
-  --text:    #e8eaf6;
-  --muted:   #9e9e9e;
+  --accent:  #0098c7;
+  --accent2: #6320cc;
+  --text:    #1a1a2e;
+  --muted:   #555;
 }
 
 html, body {
   height: 100%;
   font-family: 'Segoe UI', system-ui, sans-serif;
-  background: #050510;
+  background: #f0f4ff;
   color: var(--text);
   overflow-x: hidden;
 }

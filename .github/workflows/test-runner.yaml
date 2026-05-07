@@ -1,0 +1,16 @@
+name: Test ARC Runner
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: arc-runner-lab-v2
+    steps:
+      - name: Print hostname
+        run: hostname
+
+      - name: Print working directory
+        run: pwd
+
+      - name: Check kubectl access
+        run: kubectl get nodes

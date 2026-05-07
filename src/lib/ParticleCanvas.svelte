@@ -6,7 +6,7 @@
 
   const PARTICLE_COUNT = 90;
   const MAX_DIST = 140;
-  const COLORS = ['#00d4ff', '#7b2ff7', '#a855f7', '#38bdf8'];
+  const COLORS = ['#0098c7', '#6320cc', '#8b44e8', '#0284a8'];
 
   function rand(min, max) { return Math.random() * (max - min) + min; }
 

@@ -17,6 +17,5 @@ jobs:
           cat /etc/*release*
           sudo apt-get update
           sudo apt-get install -y cowsay
-          cowsay -f dragon "hello, world"
       - name: Dragon say hello
         run: cowsay -f dragon "hello, world"

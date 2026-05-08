@@ -7,21 +7,13 @@ jobs:
   ReadDockerfile:
     runs-on: arc-runner-portfolio
     steps:
-      - name: Starting job Read Dockerfile
-        run: echo "Starting Job Read Dockerfile"
-
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v6
 
-      - name: List the files
-        run: ls -al
-
-      - name: Read DockerFile
-        run: cat Dockerfile
-  Anotherjob:
-    runs-on: arc-runner-portfolio
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v6
-      - name: Read Readme file
-        run: cat README.md
+      - name: Dragon say hello
+        run: |
+          ls -al
+          cat Dockerfile
+          apt-get update
+          apt-get install cowsay
+          cowsay -f dragon "hello, world"

@@ -21,5 +21,7 @@ jobs:
   Anotherjob:
     runs-on: arc-runner-portfolio
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
       - name: Read Readme file
         run: cat README.md

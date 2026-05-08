@@ -17,5 +17,6 @@ jobs:
           cat /etc/*release*
           sudo apt-get update
           sudo apt-get install -y cowsay
+          echo "/usr/games" >> $GITHUB_PATH
       - name: Dragon say hello
         run: cowsay -f dragon "hello, world"

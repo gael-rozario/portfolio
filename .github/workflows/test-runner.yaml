@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Dragon say hello
+      - name: install cowsay
         run: |
           ls -al
           cat Dockerfile
@@ -18,3 +18,5 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cowsay
           cowsay -f dragon "hello, world"
+      - name: Dragon say hello
+        run: cowsay -f dragon "hello, world"

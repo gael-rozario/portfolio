@@ -14,6 +14,7 @@ jobs:
         run: |
           ls -al
           cat Dockerfile
-          apt-get update
-          apt-get install cowsay
+          cat /etc/*release*
+          sudo apt-get update
+          sudo apt-get install cowsay
           cowsay -f dragon "hello, world"

@@ -1,17 +1,20 @@
-name: My first job
+name: First workflow to print Dockerfile
 
 on:
   - push
 
 jobs:
-  job1:
+  ReadDockerfile:
     runs-on: arc-runner-portfolio
     steps:
-      - name: Welcome message
-        run: echo "Welcome to the new job"
+      - name: Starting job Read Dockerfile
+        run: echo "Starting Job Read Dockerfile"
 
-      - name: List files
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: List the files
         run: ls -al
 
-      - name: cat Dockerfile
+      - name: Read DockerFile
         run: cat Dockerfile

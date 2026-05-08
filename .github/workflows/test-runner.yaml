@@ -1,16 +1,17 @@
-name: Test ARC Runner
+name: My first job
+
 on:
-  workflow_dispatch:
+  - push
 
 jobs:
-  test:
+  job1:
     runs-on: arc-runner-portfolio
     steps:
-      - name: Print hostname
-        run: hostname
+      - name: Welcome message
+        run: echo "Welcome to the new job"
 
-      - name: Print working directory
-        run: pwd
+      - name: List files
+        run: ls -al
 
-      - name: Check kubectl access
-        run: kubectl get nodes
+      - name: cat Dockerfile
+        run: cat Dockerfile

@@ -3,15 +3,24 @@ name: First workflow to print Dockerfile
 on:
   - push
 
+env:
+  workflowenvkey: workflowenvvalue
 jobs:
   Run-unit-tests:
+    env:
+      joblevelkey: joblevelvalue
     runs-on: arc-runner-portfolio
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
       - name: install a random binary cowsay
+        env:
+          steplevelkey: steplevelvalue
         run: |
+          echo this is step level envvalue $steplevelkey
+          echo this is job level envvalue $joblevelkey
+          echo this is workflow level envvalue $workflowenvkey
           sudo apt-get update
           sudo apt-get install -y cowsay
           echo "/usr/games" >> $GITHUB_PATH

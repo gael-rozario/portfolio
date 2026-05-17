@@ -4,19 +4,24 @@ on:
   - push
 
 jobs:
-  ReadDockerfile:
+  Run-unit-tests:
     runs-on: arc-runner-portfolio
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: install cowsay
+      - name: install a random binary cowsay
         run: |
-          ls -al
-          cat Dockerfile
-          cat /etc/*release*
           sudo apt-get update
           sudo apt-get install -y cowsay
           echo "/usr/games" >> $GITHUB_PATH
-      - name: Dragon say hello
-        run: cowsay -f dragon "hello, world"
+      - name: Run unit-tests
+        run: echo "this would build steps for applications"
+  build-app:
+    runs-on: arc-runner-portfolio
+    needs: Run-unit-tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: build app
+        run: echo "steps for building app"

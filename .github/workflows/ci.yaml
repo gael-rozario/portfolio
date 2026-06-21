@@ -18,9 +18,9 @@ jobs:
 
       - name: Install Kaniko
         run: |
-          curl -sSL -o /usr/local/bin/kaniko \
+          curl -sSL -o /tmp/kaniko \
             https://github.com/GoogleContainerTools/kaniko/releases/download/v1.23.2/executor-linux-amd64
-          chmod +x /usr/local/bin/kaniko
+          chmod +x /tmp/kaniko
 
       - name: Authenticate to GHCR
         run: |
@@ -37,7 +37,7 @@ jobs:
           else
             EXTRA_FLAGS="--destination ghcr.io/${{ github.repository }}:main"
           fi
-          /usr/local/bin/kaniko \
+          /tmp/kaniko \
             --context="${{ github.workspace }}" \
             --dockerfile="${{ github.workspace }}/Dockerfile" \
             --destination="ghcr.io/${{ github.repository }}:${SHORT_SHA}" \

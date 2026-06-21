@@ -31,6 +31,24 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: false
 
+  release:
+    runs-on: arc-runner-portfolio
+    permissions: write-all
+    needs: tag
+    if: ${{ needs.tag.outputs.new_tag != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.tag.outputs.new_tag }}
+          generate_release_notes: true
+
   build:
     runs-on: arc-runner-portfolio
     permissions: write-all

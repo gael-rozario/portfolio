@@ -27,7 +27,7 @@ jobs:
     runs-on: arc-runner-portfolio
     permissions: write-all
     needs: tag
-    if: needs.tag.outputs.new_tag != ''
+    if: ${{ needs.tag.outputs.new_tag != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

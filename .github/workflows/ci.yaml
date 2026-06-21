@@ -19,7 +19,7 @@ jobs:
       - name: Install Kaniko
         run: |
           curl -sSL -o /tmp/kaniko \
-            https://github.com/GoogleContainerTools/kaniko/releases/download/v1.23.2/executor-linux-amd64
+            https://github.com/GoogleContainerTools/kaniko/releases/download/v1.23.2/executor
           chmod +x /tmp/kaniko
 
       - name: Authenticate to GHCR

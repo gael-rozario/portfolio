@@ -17,6 +17,13 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
+      - name: Create initial tag if none exists
+        run: |
+          if [ -z "$(git tag)" ]; then
+            git tag v0.0.0
+            git push origin v0.0.0
+          fi
+
       - name: Bump version and push tag
         id: bump
         uses: mathieudutour/github-tag-action@v6.2

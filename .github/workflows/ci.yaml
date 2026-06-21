@@ -5,9 +5,29 @@ on:
     branches: [main]
 
 jobs:
+  tag:
+    runs-on: arc-runner-portfolio
+    permissions: write-all
+    outputs:
+      new_tag: ${{ steps.bump.outputs.new_tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Bump version and push tag
+        id: bump
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: false
+
   build:
     runs-on: arc-runner-portfolio
     permissions: write-all
+    needs: tag
+    if: needs.tag.outputs.new_tag != ''
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,8 +45,8 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=sha,prefix=,format=short
-            type=ref,event=branch
+            type=semver,pattern={{version}},value=${{ needs.tag.outputs.new_tag }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ needs.tag.outputs.new_tag }}
 
       - name: Build and push
         uses: docker/build-push-action@v6

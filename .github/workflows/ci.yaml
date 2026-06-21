@@ -16,31 +16,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Kaniko
-        run: |
-          curl -sSL -o /tmp/kaniko \
-            https://github.com/GoogleContainerTools/kaniko/releases/download/v1.23.2/executor
-          chmod +x /tmp/kaniko
-
-      - name: Authenticate to GHCR
-        run: |
-          mkdir -p /tmp/.docker
-          printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' \
-            "$(printf '%s:%s' '${{ github.actor }}' '${{ secrets.GITHUB_TOKEN }}' | base64 -w0)" \
-            > /tmp/.docker/config.json
+      - name: Install buildah
+        run: sudo apt-get install -y buildah
 
       - name: Build and push
-        env:
-          DOCKER_CONFIG: /tmp/.docker
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            EXTRA_FLAGS="--no-push"
-          else
-            EXTRA_FLAGS="--destination ghcr.io/${{ github.repository }}:main"
+          buildah build -t ghcr.io/${{ github.repository }}:${SHORT_SHA} .
+
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            buildah tag \
+              ghcr.io/${{ github.repository }}:${SHORT_SHA} \
+              ghcr.io/${{ github.repository }}:main
+
+            buildah push \
+              --creds "${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}" \
+              ghcr.io/${{ github.repository }}:${SHORT_SHA}
+
+            buildah push \
+              --creds "${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}" \
+              ghcr.io/${{ github.repository }}:main
           fi
-          /tmp/kaniko \
-            --context="${{ github.workspace }}" \
-            --dockerfile="${{ github.workspace }}/Dockerfile" \
-            --destination="ghcr.io/${{ github.repository }}:${SHORT_SHA}" \
-            ${EXTRA_FLAGS}

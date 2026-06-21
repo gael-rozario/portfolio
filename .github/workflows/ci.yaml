@@ -20,7 +20,7 @@ jobs:
       - name: Create initial tag if none exists
         run: |
           if [ -z "$(git tag)" ]; then
-            git tag v0.0.0
+            git tag v0.0.0 $(git rev-list --max-parents=0 HEAD)
             git push origin v0.0.0
           fi
 

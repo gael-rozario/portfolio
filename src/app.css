@@ -1,24 +1,29 @@
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 :root {
-  --accent:  #0098c7;
-  --accent2: #6320cc;
-  --text:    #1a1a2e;
-  --muted:   #555;
+	--paper: oklch(0.99 0.003 95);
+	--ink:   oklch(0.24 0.012 260);
+	--line:  oklch(0.83 0.01 260);
+	--link:  oklch(0.55 0.2 258);
+	--mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 }
 
-html, body {
-  height: 100%;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  background: #f0f4ff;
-  color: var(--text);
-  overflow-x: hidden;
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
 
-#app {
-  min-height: 100vh;
+html,
+body {
+	margin: 0;
+	min-height: 100%;
+}
+
+body {
+	min-height: 100vh;
+	background-color: var(--paper);
+	color: var(--ink);
+	font-family: var(--mono);
+	display: grid;
+	place-items: center;
+	overflow-x: hidden;
 }

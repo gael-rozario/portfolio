@@ -1,6 +1,13 @@
 # ── Stage 1: build ────────────────────────────────────────────────
 FROM node:22-alpine AS builder
 
+# Install typst (needed for prebuild: resume PDF compilation)
+RUN wget -qO /tmp/typst.tar.xz \
+      https://github.com/typst/typst/releases/download/v0.14.2/typst-x86_64-unknown-linux-musl.tar.xz \
+    && tar -xJf /tmp/typst.tar.xz -C /tmp \
+    && mv /tmp/typst-x86_64-unknown-linux-musl/typst /usr/local/bin/typst \
+    && rm -rf /tmp/typst.tar.xz /tmp/typst-x86_64-unknown-linux-musl
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -10,7 +17,7 @@ RUN npm run build
 # ── Stage 2: serve ────────────────────────────────────────────────
 FROM nginx:alpine
 
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
 
 # SPA fallback: any unknown path returns index.html
 RUN printf 'server {\n\

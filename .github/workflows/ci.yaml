@@ -24,12 +24,14 @@ jobs:
 
       - name: Authenticate to GHCR
         run: |
-          mkdir -p /kaniko/.docker
+          mkdir -p /tmp/.docker
           printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' \
             "$(printf '%s:%s' '${{ github.actor }}' '${{ secrets.GITHUB_TOKEN }}' | base64 -w0)" \
-            > /kaniko/.docker/config.json
+            > /tmp/.docker/config.json
 
       - name: Build and push
+        env:
+          DOCKER_CONFIG: /tmp/.docker
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
           if [ "${{ github.event_name }}" = "pull_request" ]; then

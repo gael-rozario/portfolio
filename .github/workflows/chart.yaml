@@ -19,6 +19,13 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
+      - name: Create initial chart tag if none exists
+        run: |
+          if [ -z "$(git tag | grep '^chart-')" ]; then
+            git tag chart-v0.0.0 $(git rev-list --max-parents=0 HEAD)
+            git push origin chart-v0.0.0
+          fi
+
       - name: Bump chart version and push tag
         id: bump
         uses: mathieudutour/github-tag-action@v6.2

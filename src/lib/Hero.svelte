@@ -36,8 +36,8 @@
 		position: relative;
 		z-index: 1;
 		width: 100%;
-		max-width: 980px;
-		padding: 64px 51px;
+		max-width: 1176px;
+		padding: 77px 61px;
 		text-align: center;
 		display: flex;
 		flex-direction: column;
@@ -46,7 +46,7 @@
 
 	.name {
 		font-weight: 800;
-		font-size: 37px;
+		font-size: 44px;
 		letter-spacing: 1px;
 		text-transform: uppercase;
 		line-height: 1;
@@ -60,10 +60,10 @@
 		align-items: center;
 		flex-wrap: wrap;
 		justify-content: center;
-		gap: 10px;
-		margin-top: 21px;
+		gap: 12px;
+		margin-top: 25px;
 		font-weight: 700;
-		font-size: 14px;
+		font-size: 17px;
 	}
 
 	.links a {
@@ -80,9 +80,9 @@
 	}
 
 	.email {
-		margin-top: 10px;
+		margin-top: 12px;
 		margin-bottom: 0;
-		font-size: 13px;
+		font-size: 16px;
 		opacity: 0.85;
 	}
 
@@ -96,19 +96,19 @@
 	}
 
 	.diagram {
-		width: min(504px, 96%);
+		width: min(605px, 96%);
 		height: auto;
-		margin-top: 120px;
+		margin-top: 144px;
 		display: block;
 	}
 
 	@media (max-width: 600px) {
 		.hero {
-			padding: 48px 20px;
+			padding: 58px 24px;
 		}
 
 		.name {
-			font-size: clamp(22px, 6.5vw, 37px);
+			font-size: clamp(26px, 7.8vw, 44px);
 			white-space: normal;
 		}
 	}

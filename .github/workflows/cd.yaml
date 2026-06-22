@@ -2,13 +2,16 @@ name: CD
 
 on:
   workflow_run:
-    workflows: [CI]
+    workflows: [CI, Chart]
     types: [completed]
     branches: [main]
   workflow_dispatch:
     inputs:
       tag:
         description: 'Image tag to deploy (e.g. 0.1.0)'
+        required: false
+      chart:
+        description: 'Chart version to deploy (e.g. 0.1.0)'
         required: false
 
 jobs:
@@ -32,8 +35,12 @@ jobs:
             TAG=$(git tag --sort=-v:refname | grep -v '^chart-' | head -1)
             echo "tag=${TAG#v}" >> $GITHUB_OUTPUT
           fi
-          CHART_TAG=$(git tag --sort=-v:refname | grep '^chart-' | head -1)
-          echo "chart=${CHART_TAG#chart-v}" >> $GITHUB_OUTPUT
+          if [ -n "${{ inputs.chart }}" ]; then
+            echo "chart=${{ inputs.chart }}" >> $GITHUB_OUTPUT
+          else
+            CHART_TAG=$(git tag --sort=-v:refname | grep '^chart-' | head -1)
+            echo "chart=${CHART_TAG#chart-v}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set up Helm
         uses: azure/setup-helm@v4

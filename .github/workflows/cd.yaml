@@ -32,5 +32,4 @@ jobs:
           helm upgrade --install portfolio charts/portfolio \
             --set image.tag=${{ steps.version.outputs.tag }} \
             --namespace portfolio \
-            --create-namespace \
             --wait

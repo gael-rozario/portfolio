@@ -18,6 +18,13 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+httpRoute:
+  enabled: true
+  gatewayName: eg
+  gatewayNamespace: envoy-gateway-system
+  hostnames:
+    - gaelrozario.com
+
 podAnnotations: {}
 podLabels: {}
 

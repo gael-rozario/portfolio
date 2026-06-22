@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Get latest image tag
+      - name: Get versions
         id: version
         run: |
           if [ -n "${{ inputs.tag }}" ]; then
@@ -32,13 +32,23 @@ jobs:
             TAG=$(git tag --sort=-v:refname | grep -v '^chart-' | head -1)
             echo "tag=${TAG#v}" >> $GITHUB_OUTPUT
           fi
+          CHART_TAG=$(git tag --sort=-v:refname | grep '^chart-' | head -1)
+          echo "chart=${CHART_TAG#chart-v}" >> $GITHUB_OUTPUT
 
       - name: Set up Helm
         uses: azure/setup-helm@v4
 
+      - name: Log in to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io \
+            --username ${{ github.actor }} \
+            --password-stdin
+
       - name: Deploy
         run: |
-          helm upgrade --install portfolio charts/portfolio \
+          helm upgrade --install portfolio \
+            oci://ghcr.io/${{ github.repository_owner }}/charts/portfolio \
+            --version ${{ steps.version.outputs.chart }} \
             --set image.tag=${{ steps.version.outputs.tag }} \
             --namespace portfolio \
             --wait

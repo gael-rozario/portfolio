@@ -2,7 +2,7 @@
 	const links = [
 		{ label: 'gaelrozario.com', href: 'https://gaelrozario.com' },
 		{ label: 'GitHub',          href: 'https://github.com/gael-rozario' },
-		{ label: 'Blog',            href: 'https://blogs.gaelrozario.com' },
+		{ label: 'Blog',            href: 'https://blog.gaelrozario.com' },
 		{ label: 'LinkedIn',        href: 'https://www.linkedin.com/in/gael-rozario-834171181' },
 		{ label: 'Resume',          href: '/resume.pdf' },
 	];

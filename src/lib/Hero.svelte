@@ -1,6 +1,6 @@
 <script>
 	const links = [
-		{ label: 'gaelrozario.com', href: '' },
+		/* removed domain link */,
 		{ label: 'GitHub',          href: 'https://github.com/gael-rozario' },
 		{ label: 'Blog',            href: 'https://blog.gaelrozario.com' },
 		{ label: 'LinkedIn',        href: 'https://www.linkedin.com/in/gael-rozario-834171181' },

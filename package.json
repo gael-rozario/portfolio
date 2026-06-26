@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "prebuild": "typst compile resume/main.typ static/resume.pdf",
+    
     "build": "vite build",
     "preview": "vite preview"
   },

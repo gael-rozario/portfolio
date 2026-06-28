@@ -1,43 +1,92 @@
-# Svelte + Vite
+# portfolio
 
-This template should help get you started developing with Svelte in Vite.
+The source for [gaelrozario.com](https://gaelrozario.com) — a personal portfolio site built with SvelteKit, containerized with Docker, and deployed to Kubernetes via Helm and GitHub Actions.
 
-## Recommended IDE Setup
+The site is prerendered to static HTML at build time and served by nginx.
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## Tech stack
 
-## Need an official Svelte framework?
+- **[SvelteKit](https://svelte.dev/docs/kit)** with `@sveltejs/adapter-static` — fully prerendered static site
+- **Vite** for the build
+- **[Playwright](https://playwright.dev/)** for end-to-end tests
+- **Docker** (multi-stage build → nginx) and **Helm** for Kubernetes deployment
+- **GitHub Actions** for CI/CD, running on self-hosted [ARC](https://github.com/actions/actions-runner-controller) runners
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## Project structure
 
-## Technical considerations
-
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `checkJs` in the JS template?**
-
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
 ```
+src/
+  routes/           SvelteKit routes (+layout.svelte, +page.svelte)
+  lib/              Components and utilities
+  assets/           Images and static assets
+  app.html          Page template
+  app.css           Global styles
+Dockerfile          Multi-stage build → nginx static server
+charts/portfolio/   Helm chart for Kubernetes deployment
+.github/workflows/  CI, Chart, and CD pipelines
+```
+
+## Local development
+
+Requires Node.js 22.
+
+```sh
+npm install
+npm run dev          # start the dev server
+```
+
+Other scripts:
+
+```sh
+npm run build        # production build (static output in build/)
+npm run preview      # preview the production build
+```
+
+## Docker
+
+The `Dockerfile` is a two-stage build: stage one runs `vite build` on `node:22-alpine`, stage two copies the static output into `nginx:alpine` and serves it on port 80 (with SPA fallback).
+
+```sh
+docker build -t portfolio .
+docker run --rm -p 8080:80 portfolio   # http://localhost:8080
+```
+
+Published images live at `ghcr.io/gael-rozario/portfolio`.
+
+## Helm chart
+
+The chart in `charts/portfolio/` deploys the image to Kubernetes.
+
+| Resource | Notes |
+|----------|-------|
+| `Deployment` | runs the nginx image, port 80, with liveness/readiness probes and CPU/memory limits |
+| `Service` | `ClusterIP` on port 80 |
+| `HTTPRoute` | Gateway API routes (`gaelrozario.com`) attached to an Envoy Gateway |
+
+Key values (`charts/portfolio/values.yaml`):
+
+- `image.repository` / `image.tag` — image to deploy (tag defaults to the chart `appVersion`)
+- `httpRoute.*` — gateway name/namespace and hostnames
+- `resources` — requests/limits
+
+Deploy manually from the published OCI chart:
+
+```sh
+helm upgrade --install portfolio \
+  oci://ghcr.io/gael-rozario/charts/portfolio \
+  --version <chart-version> \
+  --set image.tag=<image-version> \
+  --namespace portfolio --wait
+```
+
+## CI/CD
+
+Three GitHub Actions workflows run on the `arc-runner-portfolio` self-hosted runner and publish to GHCR. Each uses least-privilege `permissions` and a `concurrency` group.
+
+- **CI** (`.github/workflows/ci.yaml`)
+  - on **push** to `main` (ignoring `charts/**` and `.github/**`): bumps a semver git tag from commit messages, creates a GitHub Release, then builds and pushes the Docker image to `ghcr.io/gael-rozario/portfolio`.
+  - on **pull request**: validates the PR title is a [Conventional Commit](https://www.conventionalcommits.org/) and runs `helm lint` / `helm template` on the chart. No tagging, release, or image build happens on PRs.
+- **Chart** (`.github/workflows/chart.yaml`) — on push to `main` touching `charts/**`: bumps a `chart-v*` tag, stamps the chart version, then packages and pushes the Helm chart to `oci://ghcr.io/gael-rozario/charts`.
+- **CD** (`.github/workflows/cd.yaml`) — runs after CI or Chart completes successfully (or via manual `workflow_dispatch`): resolves the latest image and chart versions and runs `helm upgrade --install` into the `portfolio` namespace. The dispatch form accepts explicit `tag` and `chart` inputs.
+
+Versioning is automatic and driven by commit messages (via [github-tag-action](https://github.com/mathieudutour/github-tag-action)): app images use `vX.Y.Z` tags, charts use `chart-vX.Y.Z` tags.

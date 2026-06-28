@@ -6,10 +6,17 @@ on:
     paths:
       - 'charts/**'
 
+concurrency:
+  group: chart-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {}
+
 jobs:
   tag:
     runs-on: arc-runner-portfolio
-    permissions: write-all
+    permissions:
+      contents: write
     outputs:
       new_tag: ${{ steps.bump.outputs.new_tag }}
     steps:
@@ -36,7 +43,9 @@ jobs:
 
   publish:
     runs-on: arc-runner-portfolio
-    permissions: write-all
+    permissions:
+      contents: read
+      packages: write
     needs: tag
     if: ${{ needs.tag.outputs.new_tag != '' }}
     steps:

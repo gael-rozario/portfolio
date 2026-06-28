@@ -6,11 +6,50 @@ on:
     paths-ignore:
       - 'charts/**'
       - '.github/**'
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions: {}
 
 jobs:
+  title:
+    runs-on: arc-runner-portfolio
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Validate PR title is a Conventional Commit
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  chart-validate:
+    runs-on: arc-runner-portfolio
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Helm lint
+        run: helm lint charts/portfolio
+
+      - name: Helm template
+        run: helm template portfolio charts/portfolio
+
   tag:
     runs-on: arc-runner-portfolio
-    permissions: write-all
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
     outputs:
       new_tag: ${{ steps.bump.outputs.new_tag }}
     steps:
@@ -36,9 +75,10 @@ jobs:
 
   release:
     runs-on: arc-runner-portfolio
-    permissions: write-all
+    permissions:
+      contents: write
     needs: tag
-    if: ${{ needs.tag.outputs.new_tag != '' }}
+    if: ${{ github.event_name == 'push' && needs.tag.outputs.new_tag != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,9 +94,11 @@ jobs:
 
   build:
     runs-on: arc-runner-portfolio
-    permissions: write-all
+    permissions:
+      contents: read
+      packages: write
     needs: tag
-    if: ${{ needs.tag.outputs.new_tag != '' }}
+    if: ${{ github.event_name == 'push' && needs.tag.outputs.new_tag != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

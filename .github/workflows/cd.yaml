@@ -14,10 +14,18 @@ on:
         description: 'Chart version to deploy (e.g. 0.1.0)'
         required: false
 
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {}
+
 jobs:
   deploy:
     runs-on: arc-runner-portfolio
-    permissions: write-all
+    permissions:
+      contents: read
+      packages: read
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout

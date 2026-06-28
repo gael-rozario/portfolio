@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npx vite build
+RUN npm run build
 
 # ── Stage 2: serve ────────────────────────────────────────────────
 FROM nginx:alpine

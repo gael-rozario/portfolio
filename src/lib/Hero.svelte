@@ -3,7 +3,7 @@
 		{ label: 'GitHub',          href: 'https://github.com/gael-rozario' },
 		{ label: 'Blog',            href: 'https://blog.gaelrozario.com' },
 		{ label: 'LinkedIn',        href: 'https://www.linkedin.com/in/gael-rozario-834171181' },
-		{ label: 'Resume',          href: '/resume.pdf' },
+		<!-- { label: 'Resume',          href: '/resume.pdf' }, -->
 	];
 </script>
 

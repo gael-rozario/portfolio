@@ -20,7 +20,7 @@
 	</nav>
 
 	<p class="email">
-		<a href="mailto:hi@gaelrozario.com">hi@gaelrozario.com</a>
+		<a href="mailto:hi@gaelrozario.com">hi@gaelrozario.com</a> | <a href="mailto:gaelrozario@gmail.com">gaelrozario@gmail.com</a>
 	</p>
 
 	<img

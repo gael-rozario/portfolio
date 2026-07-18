@@ -66,4 +66,5 @@ jobs:
             --version ${{ steps.version.outputs.chart }} \
             --set image.tag=${{ steps.version.outputs.tag }} \
             --namespace portfolio \
+            --force-conflicts \
             --wait
